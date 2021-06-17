@@ -16,4 +16,9 @@ echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf
 service procps restart
 
 # Setting default gateway
-cp multimaster /etc/network/if-up.d/
+interface=$(iw dev | awk '$1=="Interface"{print $2}')
+if [ "$IFACE" = $interface ]; then
+   route add default gw $host_ip
+fi
+
+route add -net 192.168.11.0 netmask 255.255.255.0 gw $host_ip
