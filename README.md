@@ -4,7 +4,7 @@ The goal of this repo is to create a simple solution to dealing with multiple mu
 
 The network setup is from: https://digital.csic.es/bitstream/10261/133333/1/ROS-systems.pdf
 
-## Current setup for a single ROS network (on linux)
+## Current setup for a single ROS network (on linux) (Will be replaced by a script)
 
 Install multimaster-fkie
 ```
@@ -22,7 +22,6 @@ Restart services
 ```
 sudo service procps restart
 ```
-
 ## Current setup for multiple local ROS networks (on linux)
 
 Install multimaster-fkie
@@ -67,3 +66,5 @@ Example:
 192.168.0.201   drone1
 192.168.0.221   turlebot
 ```
+
+## Testing and proof of time synchronization working.
