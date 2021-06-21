@@ -22,6 +22,26 @@ sudo sh -c "echo net.ipv4.icmp_echo_ignore_broadcasts=0 >> /etc/sysctl.conf"
 ```
 sudo service procps restart
 ```
+## Testing
+Testing requires 4 terminals running on each machine. 
+#### Start roscore on every machine
+```
+roscore
+```
+#### Start a master discovery
+```
+rosrun master_discovery_fkie master_discovery _mcast_group:=224.0.0.1
+```
+#### Start a master sync
+```
+rosrun master_sync_fkie master_sync
+```
+#### Run publish_data.py or recieve_data.py on any machine. Communication will be synced.
+```
+python publish_data.py
+python recieve_data.py
+```
+
 ## Current setup for multiple local ROS networks (on ubtuntu) (will be replaced by a script)
 
 Install multimaster-fkie
@@ -65,24 +85,4 @@ Example:
 ```
 192.168.0.201   drone1
 192.168.0.221   turlebot
-```
-
-## Testing and proof of time synchronization working.
-Testing requires 4 terminals running on each machine. 
-#### Start roscore on every machine
-```
-roscore
-```
-#### Start a master discovery
-```
-rosrun master_discovery_fkie master_discovery _mcast_group:=224.0.0.1
-```
-#### Start a master sync
-```
-rosrun master_sync_fkie master_sync
-```
-#### Run publish_data.py or recieve_data.py on any machine. Communication will be synced.
-```
-python publish_data.py
-python recieve_data.py
 ```
