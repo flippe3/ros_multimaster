@@ -4,6 +4,9 @@ The goal of this repo is to create a simple solution to dealing with multiple mu
 
 The network setup is from: https://digital.csic.es/bitstream/10261/133333/1/ROS-systems.pdf
 
+TODO:
+* Create a solution that does not require every ip in /etc/hosts.
+
 ## Current setup for a single ROS network (on ubuntu) (`setup_client.sh` replaces step 2 and forward)
 
 #### Step 1. Install multimaster-fkie
