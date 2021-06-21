@@ -22,7 +22,7 @@ Restart services
 ```
 sudo service procps restart
 ```
-## Current setup for multiple local ROS networks (on linux)
+## Current setup for multiple local ROS networks (on linux) (will be replaced by a script)
 
 Install multimaster-fkie
 ```
