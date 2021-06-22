@@ -89,3 +89,59 @@ Example:
 192.168.0.201   drone1
 192.168.0.221   turlebot
 ```
+## Setup NTP on host
+Save this in /etc/ntp.conf
+```
+driftfile /var/lib/ntp/ntp.drift
+statistics loopstats peerstats clockstats
+filegen loopstats file loopstats type day enable
+filegen peerstats file peerstats type day enable
+filegen clockstats file clockstats type day enable
+pool 0.ubuntu.pool.ntp.org iburst
+pool 1.ubuntu.pool.ntp.org iburst
+pool 2.ubuntu.pool.ntp.org iburst
+pool 3.ubuntu.pool.ntp.org iburst
+server 127.127.1.0
+fudge 127.127.1.0 stratum 10
+pool ntp.ubuntu.com
+restrict -4 default kod notrap nomodify nopeer noquery limited
+restrict -6 default kod notrap nomodify nopeer noquery limited
+restrict 192.0.0.0 mask 255.0.0.0 nomodify notrap
+restrict 127.0.0.1
+restrict ::1
+restrict source notrap nomodify noquery
+```
+Start the service
+```
+sudo service ntp start
+```
+
+## Setup chrony on client
+Save this in `/etc/chrony/chrony.conf`
+```
+server <host-ip> minpoll 2 maxpoll 4
+initstepslew 2 <host-ip>
+keyfile /etc/chrony/chrony.keys
+commandkey 1
+driftfile /var/lib/chrony/chrony.drift
+maxupdateskew 5
+dumponexit
+dumpdir /var/lib/chrony
+pidfile /var/run/chronyd.pid
+logchange 0.5
+rtcfile /etc/chrony.rtc
+rtconutc
+rtcdevice /dev/rtc
+sched_priority 1
+local stratum 10
+allow 127.0.0.1/8
+```
+Synchronize with the server
+```
+sudo chrony stop
+sudo chrony start
+```
+For debugging
+```
+chronyc tracking
+```
