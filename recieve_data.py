@@ -30,8 +30,8 @@ def get_time_difference():
     return time_diff
 
 def callback(data):
-    current_time = rospy.get_rostime()
-    rospy.loginfo("I heard %s current_time: %d", data.data, int(str(current_time)) - int(data.data))
+    current_time = str(rospy.get_rostime().secs) + "." + str(rospy.get_rostime().nsecs)
+    rospy.loginfo("I heard %s current_time: %d", data.data, float(str(current_time)) - float(data.data))
     #rospy.loginfo("I heard %s", data.machine)
     
 def listener():
