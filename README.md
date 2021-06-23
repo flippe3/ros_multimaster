@@ -86,7 +86,7 @@ rosrun master_discovery_fkie master_discovery _mcast_group:=224.0.0.1
 ```
 rosrun master_sync_fkie master_sync
 ```
-### Testing
+## Testing
 #### Run publish_data.py or recieve_data.py on any machine.
 ```
 python publish_data.py
