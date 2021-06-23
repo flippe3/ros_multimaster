@@ -20,5 +20,6 @@ while True:
         f = open("ips.txt", "a")
         f.write("\n" + addr[0] + "\t" + data)
         f.close()
-        conn.send(data)
+        ips = open("ips.txt", "r")        
+        conn.send(ips.read())
     conn.close()
