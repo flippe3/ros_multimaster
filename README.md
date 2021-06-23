@@ -7,7 +7,7 @@ The network setup is from: https://digital.csic.es/bitstream/10261/133333/1/ROS-
 TODO:
 * Create a solution that does not require every ip in /etc/hosts.
 
-## Setup for a single ROS network
+## Setup for a single ROS network (both hosts and clients)
 
 #### Step 1. Install multimaster-fkie
 ```
@@ -72,7 +72,7 @@ For debugging
 ```
 chronyc tracking
 ```
-## Starting the multimaster
+## Starting the multimaster (on both host and clients)
 Testing requires 4 terminals running on each machine. 
 #### Start roscore on every machine
 ```
