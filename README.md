@@ -44,7 +44,7 @@ Install chrony
 ```
 sudo apt install chrony
 ```
-Save this in `/etc/chrony/chrony.conf`
+Edit the `<host-ip>` with the host ip then save this in `/etc/chrony/chrony.conf` 
 ```
 server <host-ip> minpoll 2 maxpoll 4
 initstepslew 2 <host-ip>
