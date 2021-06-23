@@ -30,7 +30,7 @@ Install NTP
 ```
 sudo apt install ntp
 ```
-Save this in `ntp.conf` in `/etc/ntp.conf`
+Save `ntp.conf` in `/etc/ntp.conf`
 ```
 sudo cp ntp.conf /etc/ntp.conf
 ```
