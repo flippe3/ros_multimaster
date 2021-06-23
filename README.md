@@ -1,13 +1,13 @@
 # ros_multimaster
 
-The goal of this repo is to create a simple solution to dealing with multiple multimasters in ROS. The setup necessary will be provided in setup files and then to add a new machine to the network you only need to add the IP and all the /etc/hosts will be updated.
+The goal of this repo is to create a simple solution to dealing with time synchronization between multiple multimasters in ROS. The setup necessary will be provided in setup files and then to add a new machine to the network you should only need to add the IP and all the /etc/hosts will be updated.
 
 The network setup is from: https://digital.csic.es/bitstream/10261/133333/1/ROS-systems.pdf
 
 TODO:
 * Create a solution that does not require every ip in /etc/hosts.
 
-## Current setup for a single ROS network (on ubuntu) (`setup_client.sh` replaces step 2 and forward)
+## Setup for a single ROS network (both hosts and clients)
 
 #### Step 1. Install multimaster-fkie
 ```
@@ -26,26 +26,13 @@ sudo sh -c "echo net.ipv4.icmp_echo_ignore_broadcasts=0 >> /etc/sysctl.conf"
 sudo service procps restart
 ```
 ## Setup NTP on host
-Save this in /etc/ntp.conf
+Install NTP
 ```
-driftfile /var/lib/ntp/ntp.drift
-statistics loopstats peerstats clockstats
-filegen loopstats file loopstats type day enable
-filegen peerstats file peerstats type day enable
-filegen clockstats file clockstats type day enable
-pool 0.ubuntu.pool.ntp.org iburst
-pool 1.ubuntu.pool.ntp.org iburst
-pool 2.ubuntu.pool.ntp.org iburst
-pool 3.ubuntu.pool.ntp.org iburst
-server 127.127.1.0
-fudge 127.127.1.0 stratum 10
-pool ntp.ubuntu.com
-restrict -4 default kod notrap nomodify nopeer noquery limited
-restrict -6 default kod notrap nomodify nopeer noquery limited
-restrict 192.0.0.0 mask 255.0.0.0 nomodify notrap
-restrict 127.0.0.1
-restrict ::1
-restrict source notrap nomodify noquery
+sudo apt install ntp
+```
+Save `ntp.conf` in `/etc/ntp.conf`
+```
+sudo cp ntp.conf /etc/ntp.conf
 ```
 Start the service
 ```
@@ -53,7 +40,11 @@ sudo service ntp start
 ```
 
 ## Setup chrony on client
-Save this in `/etc/chrony/chrony.conf`
+Install chrony
+```
+sudo apt install chrony
+```
+Edit the `<host-ip>` with the host ip then save this in `/etc/chrony/chrony.conf` 
 ```
 server <host-ip> minpoll 2 maxpoll 4
 initstepslew 2 <host-ip>
@@ -81,7 +72,7 @@ For debugging
 ```
 chronyc tracking
 ```
-## Testing
+## Starting the multimaster (on both host and clients)
 Testing requires 4 terminals running on each machine. 
 #### Start roscore on every machine
 ```
@@ -95,12 +86,12 @@ rosrun master_discovery_fkie master_discovery _mcast_group:=224.0.0.1
 ```
 rosrun master_sync_fkie master_sync
 ```
-#### Run publish_data.py or recieve_data.py on any machine. Communication will be synced.
+## Testing
+#### Run publish_data.py or recieve_data.py on any machine.
 ```
 python publish_data.py
 python recieve_data.py
 ```
-
 ## Setup for multiple local ROS networks
 
 Install multimaster-fkie
