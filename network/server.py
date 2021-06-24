@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import socket
-import thread
+import threading
 
 # This is the ip of the host.
 TCP_IP = '192.168.1.106'
@@ -41,15 +41,22 @@ def on_new_client(conn, addr):
         else:
             fout.write(new_ip)
         fout.close()
-
+        
         fin = open("ips.txt", "r")
         ips = fin.read()
         conn.send(ips)
         fin.close()
-    conn.close()
+#    conn.close()
     
+ip_list = []
+threads = []
 while True:
     c, addr = s.accept()
+    ip_list.append(addr[0])
+    print(ip_list)
+    print("Threads", threading)
     print('Connection address:', addr)
-    thread.start_new_thread(on_new_client,(c,addr))
+    t = threading.Thread(target=on_new_client,args=(c,addr))
+    t.start()
+    threads.append(t)
 s.close()
