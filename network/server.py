@@ -2,6 +2,7 @@
 
 import socket
 
+# This is the ip of the host.
 TCP_IP = '192.168.1.106'
 TCP_PORT = 5005
 BUFFER_SIZE = 1024 
@@ -10,6 +11,9 @@ s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind((TCP_IP, TCP_PORT))
 s.listen(1)
 
+# Wipe ip file on boot
+open('ips.txt', 'w').close()
+
 while True:
     conn, addr = s.accept()
     print('Connection address:', addr)
@@ -17,9 +21,28 @@ while True:
         data = conn.recv(BUFFER_SIZE)
         if not data: break
         print("received data:", data)
-        f = open("ips.txt", "a")
-        f.write("\n" + addr[0] + "\t" + data)
-        f.close()
-        ips = open("ips.txt", "r")        
-        conn.send(ips.read())
+
+        # Makes sure that the data is not replicated
+        fin = open("ips.txt", "r")
+        ips = fin.read()
+        new_ip = "\n"+addr[0]+"\t"+data
+        fout = open("ips.txt", "w")
+        fin.close()
+        
+        if addr[0] in ips:
+            if new_ip in ips:
+                fout.write(new_ip)
+            else:
+                lines = ips.split("\n")
+                for line in lines:
+                    if addr[0] in line:
+                        fout.write(ips.replace(line, new_ip))
+        else:
+            fout.write(new_ip)
+        fout.close()
+
+        fin = open("ips.txt", "r")
+        ips = fin.read()
+        conn.send(ips)
+        fin.close()
     conn.close()
