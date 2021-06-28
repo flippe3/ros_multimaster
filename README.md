@@ -92,6 +92,8 @@ rosrun master_sync_fkie master_sync
 python publish_data.py
 python recieve_data.py
 ```
+
+<!---
 ## Setup for multiple local ROS networks
 
 Install multimaster-fkie
@@ -136,3 +138,4 @@ Example:
 192.168.0.201   drone1
 192.168.0.221   turlebot
 ```
+-->
