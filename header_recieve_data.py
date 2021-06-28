@@ -7,7 +7,8 @@ def callback(data):
     now = rospy.get_rostime()
     str_data =  data.data
     time = data.header.stamp
-    rospy.loginfo("Sent at %s Current time: %s \t difference %s ", time, now, (float(str(now)) - float(str(time)))*(10**-9))
+    convert_to_sec = (float(str(now)) - float(str(time)))*(10**-9)
+    rospy.loginfo("Sent at %s Current time: %s \t difference %s ", time, now, convert_to_sec)
     
 def listener():
     rospy.init_node('test_2')
