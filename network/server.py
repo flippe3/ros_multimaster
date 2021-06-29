@@ -14,6 +14,7 @@ s.listen(1)
 
 ip_list = []
 threads = []
+added_ips = []
 
 # Wipe ip file on boot
 open('ips.txt', 'w').close()
@@ -52,6 +53,14 @@ def send_ip_file(conn):
     ips = fin.read()
     conn.send(ips)
     fin.close()
+
+def update_hosts_file(addr, hostname):
+    if addr[0] in added_ips:        
+        hosts = open("/etc/hosts", "a")
+        hosts.write("\n"+addr[0]+"\t"+hostname)
+        hosts.close()
+        added_ips.append(addr[0])
+    
     
 def on_new_client(conn, addr):
     changed_ips = 0 
@@ -59,6 +68,7 @@ def on_new_client(conn, addr):
         data = conn.recv(BUFFER_SIZE)
         if not data: break
         print("received data:", data)
+        update_hosts_file(addr,data)
         update_ip_file(conn,addr,data)
         break
 
@@ -74,12 +84,11 @@ while True:
     c, addr = s.accept()
     ip_list.append(addr[0])
     print(ip_list)
-    print("Threads", threading)
     print('Connection address:', addr)
     t = threading.Thread(target=on_new_client,args=(c,addr))
     t.start()
     threads.append(t)
-    print(threads)
+#    print(threads)
     # IF A NEW THREAD COMES IN THE OLD THREADS NEEDS TO BE UPDATED.
 
     
