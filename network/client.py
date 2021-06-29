@@ -1,9 +1,13 @@
 #!/usr/bin/env python
 
 import socket
+import sys
+
 
 # This is the IP of the host
-TCP_IP = '192.168.1.106'
+print(sys.argv[0])
+TCP_IP = str(sys.argv[1])
+#TCP_IP = 192.168.1.106
 TCP_PORT = 5005
 BUFFER_SIZE = 1024
 MESSAGE = socket.gethostname()
