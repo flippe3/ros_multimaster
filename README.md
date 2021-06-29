@@ -9,7 +9,7 @@ The network setup is from: https://digital.csic.es/bitstream/10261/133333/1/ROS-
 ```
 sudo python network/server.py
 ```
-#### Step 2. Start all clients and press q when done.
+#### Step 2. Start all clients and close the program after every client is connected to the server.
 ```
 sudo python network/client.py <SERVER-IP>
 ```
