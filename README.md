@@ -4,8 +4,15 @@ The goal of this repo is to create a simple solution to dealing with time synchr
 
 The network setup is from: https://digital.csic.es/bitstream/10261/133333/1/ROS-systems.pdf
 
-TODO:
-* Create a solution that does not require every ip in /etc/hosts.
+## Setup network
+#### Step 1. Start server.
+```
+sudo python network/server.py
+```
+#### Step 2. Start all clients and press q when done.
+```
+sudo python network/client.py
+```
 
 ## Setup for a single ROS network (both hosts and clients)
 
