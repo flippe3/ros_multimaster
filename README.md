@@ -11,7 +11,7 @@ sudo python network/server.py
 ```
 #### Step 2. Start all clients and press q when done.
 ```
-sudo python network/client.py
+sudo python network/client.py <SERVER-IP>
 ```
 
 ## Setup for a single ROS network (both hosts and clients)
