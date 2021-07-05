@@ -14,6 +14,7 @@ def send_header_msgs(rate):
 
     msg = HeaderString()
     msg.data = "test"
+    msg.header.stamp = rospy.get_rostime()
     msg_count = 0 
 
     while not rospy.is_shutdown() and rospy.get_rostime() <= end_time:
@@ -21,7 +22,11 @@ def send_header_msgs(rate):
         pub.publish(msg)
         msg_count += 1
         r.sleep()
-
+    msg = HeaderString()
+    msg.data = str(msg_count)
+    msg.header.stamp = rospy.get_rostime()
+    pub.publish(msg)
+    
     return msg_count
 
 def send_int_msgs(rate):
@@ -43,8 +48,7 @@ def send_int_msgs(rate):
 
     # Send end msg
     msg = msg_count
-    pub.publish(msg)
-    
+    pub.publish(msg)    
     
     return msg_count
 
@@ -54,4 +58,4 @@ data_rate = int(input("Enter the rate in Hz: "))
 if data_type:
     print("Sent messages over 1 second: ", send_int_msgs(data_rate))
 else:
-    print("Sent messages over 1 second: ", send_header__msgs(data_rate))
+    print("Sent messages over 1 second: ", send_header_msgs(data_rate))
