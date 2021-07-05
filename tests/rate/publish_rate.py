@@ -33,7 +33,7 @@ def send_int_msgs(rate):
     end_time = start_time + rospy.Duration(1)
     msg_count = 0
 
-    msg = 1
+    msg = 0
     msg_count = 0
     
     while not rospy.is_shutdown() and rospy.get_rostime() <= end_time:
@@ -42,7 +42,7 @@ def send_int_msgs(rate):
         r.sleep()
 
     # Send end msg
-    msg = 0
+    msg = msg_count
     pub.publish(msg)
     
     

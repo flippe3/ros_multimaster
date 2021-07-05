@@ -6,10 +6,10 @@ msg_count = 0
 
 def callback(data):
     global msg_count
-    if data.data == 1:
+    if data.data == 0:
         msg_count += 1
     else:
-        print(msg_count)
+        print("Messages recieved: ", msg_count, " messages sent: ", data.data, " missed msgs: ", data.data - msg_count, " over one second.")
         msg_count = 0 
     
 def header_listener():
