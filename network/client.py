@@ -24,6 +24,7 @@ def check_duplicates(data):
         if i in hosts.read():
             print("duplicates")            
     hosts.close()
+
 while True:
     data = s.recv(BUFFER_SIZE)
     print("received data:", data)

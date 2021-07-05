@@ -1,5 +1,5 @@
 import rospy
-#from rospy_tutorials.msg import HeaderString
+from rospy_tutorials.msg import HeaderString
 from geometry_msgs.msg import Twist
 import subprocess
 import std_msgs
@@ -18,8 +18,8 @@ def turtle_callback(data):
     
 def listener():
     rospy.init_node('test_2')
-#    rospy.Subscriber("/test", HeaderString, callback)
-    rospy.Subscriber("/turtle1/cmd_vel", Twist, turtle_callback)    
+    rospy.Subscriber("/test", HeaderString, callback)
+#    rospy.Subscriber("/turtle1/cmd_vel", Twist, turtle_callback)    
     # spin() simply keeps python from exiting until this node is stopped
     rospy.spin()
 
