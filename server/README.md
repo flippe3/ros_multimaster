@@ -8,3 +8,7 @@ Everything should be easily connected to an online interface where you can enabl
 Perhaps add functionality to use rosbag files for easy experimentation.
 
 Dealing with different message types. Should have functionality to subscribe to any topic.
+
+
+TODO:
+- write a class that can launch subprocesses cleanly. roscore, multimaster, etc.

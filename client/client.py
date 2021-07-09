@@ -1,18 +1,11 @@
 import sys
 sys.path.append('util')
-from network import Network
 from process_mgmt import Subprocess
 
-class Server:
+class Client:
     def __init__(self):
-        # setup connection
-        # print the initial setup (time sync etc.)
-
-        # starts the network, scans for machines on the current
-        # network, updates if a new machine wants to connect.
-        network = Network()
         self.setup_multimaster()
-        
+
     def setup_multimaster(self):
         # setting up the subprocesses
         self.roscore = Subprocess("roscore")
@@ -29,23 +22,3 @@ class Server:
         self.master_discovery_fkie.terminate()
         self.master_sync_fkie.terminate()
         print("Terminated multimaster")
-        
-    def recieve_data(self, topic):
-        # start recieving data from a chosen topic
-        return 0
-
-    def publish_data(self):
-        return 0 
-
-    def offload(self):
-        # should probably be its own class.
-        return 0
-    
-    def command(self):
-        # this will be the current interface for controlling the server
-        # will be replaced by a web interface.
-        return 0
-
-# for debugging
-server = Server()
-
