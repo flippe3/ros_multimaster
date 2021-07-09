@@ -4,7 +4,7 @@
 class Network:
     def __init__(self):
         # clean up the old setup.
-        print("Running initial network setup")
+        print("***** Running initial network setup *****")
         
     def new_connection():
         # should be a thread to manage new connections

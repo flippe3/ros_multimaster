@@ -23,9 +23,12 @@ class Subprocess:
         # check for if something already initialized is trying to start
         self.command = command
         
-    def run(self):
+    def run(self, output=False):
         try:
-            self.process = subprocess.Popen([self.command], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            if output:
+                self.process = subprocess.Popen([self.command], shell=True)
+            else:
+                self.process = subprocess.Popen([self.command], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             self.pid = self.process.pid  # pid of the roscore process (which has child processes)
             #self.process.wait()
             time.sleep(1)
