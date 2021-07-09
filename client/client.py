@@ -5,7 +5,7 @@ from multimaster import Multimaster
 class Client:
     def __init__(self):
         multimaster = Multimaster()
-        multimaster.setup_multimaster()
+        multimaster.setup()
 
 # for debugging
 client = Client()

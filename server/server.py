@@ -12,9 +12,10 @@ class Server:
         # starts the network, scans for machines on the current
         # network, updates if a new machine wants to connect.
         network = Network()
+
         multimaster = Multimaster()
-        multimaster.setup_multimaster(debug=True)
-        terminal = Terminal()
+        multimaster.setup(debug=True)
+        terminal = Terminal(multimaster)
                         
     def recieve_data(self, topic):
         # start recieving data from a chosen topic
