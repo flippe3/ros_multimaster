@@ -4,6 +4,11 @@ The goal of this repo is to create a simple solution to dealing with time synchr
 
 The network setup is from: https://digital.csic.es/bitstream/10261/133333/1/ROS-systems.pdf
 
+## Setup server
+```
+sudo pip install uwsgi
+```
+
 ## Setup network
 #### Step 1. Start server.
 ```

@@ -6,7 +6,7 @@ from multimaster import Multimaster
 class Terminal:
     def __init__(self, multimaster):
         self.cmd_history = []
-        print("***** Starting terminal write q to quit *****")
+        print("[INFO] Starting terminal write q to quit")
         self.multimaster = multimaster
         self.get_cmd()
         
@@ -18,9 +18,10 @@ class Terminal:
         self.run_cmd()
 
     def run_cmd(self):
-        exit_cmds = ["exit", "quit", "e", "q", "terminate"]
+        exit_cmds = ["exit", "quit", "e", "q", "terminate", "kill"]
 
         if self.cmd_string in exit_cmds:            
+            self.multimaster.terminate()
             return
         else:
             if "ros" in self.cmd[0]:

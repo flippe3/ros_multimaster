@@ -18,12 +18,13 @@
 body {
     background: #fdf6e3;
     font-family: "B612";
+    color: white;
 }
 
 header {
-    text-align: center;
     color: black;
     font-family: "Roboto";
+    margin: 10px;
 }
 
 h2{
@@ -57,9 +58,8 @@ textarea {
 }
 
 .menu {
-    width: 100%;
     height: 50px;
-    background: #2aa198;
+    margin: 10px;
 }
 
 .menu_btn {
@@ -71,10 +71,10 @@ textarea {
     font-family: "B612";
     font-size: 1.5em;
     color: white;
-    padding: 0;
-    border: none;
+    padding: 1;
+    border-radius: 10px;
 }
 
 .menu_btn:hover {
-    background: magenta;
+    background: #1d706a;
 }
