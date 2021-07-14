@@ -15,7 +15,8 @@ class Server:
         self.network = Network(server=True)
         self.multimaster = Multimaster()
         self.multimaster.setup(debug=False)
-        self.terminal = Terminal(self.multimaster)
+        #self.terminal = Terminal(self.multimaster)
+        self.connected_machines()
         self.network.terminate_server()
         
     def connected_machines(self):
