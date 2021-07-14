@@ -5,6 +5,9 @@ from terminal import Terminal
 from multimaster import Multimaster
 from process_mgmt import Subprocess
 
+from std_msgs.msg import String
+import rospy
+
 class Server:
     def __init__(self):
         # setup connection
@@ -15,8 +18,10 @@ class Server:
         self.network = Network(server=True)
         self.multimaster = Multimaster()
         self.multimaster.setup(debug=False)
+        self.recieve_data("/test") # Have to put this in some kind of thread mgmt (probably a subprocess)
         #self.terminal = Terminal(self.multimaster)
-        self.connected_machines()
+        #self.connected_machines()
+        
         self.network.terminate_server()
         
     def connected_machines(self):
@@ -25,9 +30,13 @@ class Server:
         p.terminate()
         
     def recieve_data(self, topic):
-        # start recieving data from a chosen topic
-        return 0
+        rospy.init_node('listener', anonymous=True)
+        rospy.Subscriber(topic, String, self.callback)
+        rospy.spin()
 
+    def callback(self):
+        rospy.loginfo(rospy.get_caller_id() + "I heard %s", data.data)
+        
     def publish_data(self):
         return 0 
 
