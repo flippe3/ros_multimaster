@@ -10,7 +10,7 @@ class Multimaster:
         self.master_discovery_fkie = Subprocess("rosrun master_discovery_fkie master_discovery _mcast_group:=224.0.0.1") 
         self.master_sync_fkie = Subprocess("rosrun master_sync_fkie master_sync")
 
-        # runs the terminal comand
+        # runs the terminal command
         self.roscore.run(output=debug)
         self.master_discovery_fkie.run(output=debug)
         self.master_sync_fkie.run(output=debug)
@@ -21,3 +21,5 @@ class Multimaster:
         self.master_discovery_fkie.terminate()
         self.master_sync_fkie.terminate()
         print("[INFO] Terminated multimaster")
+
+    

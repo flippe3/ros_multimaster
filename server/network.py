@@ -2,47 +2,43 @@
 # Also manages the new connections to the network.
 import sys
 sys.path.append('util')
-import socket
+#import socket
 import time
 import threading
+from gevent.server import StreamServer
+from gevent.pool import Pool
+import socket
+from multiprocessing import Process
+
 
 class Network:
-    def __init__(self, port=5005, host_ip=None, server=True):
-        # clean up the old setup.
-        print("[INFO] Running initial network setup")        
-        self.threads = []
-        self.setup(port, host_ip, server)
+    def __init__(self, port=5006, host_ip=None, server=True):
+        print("[INFO] Setting up network server")
+        self.ip_list = []
+
         if server:
-            self.start_server()
-        print("[INFO] Network initiated")        
-        
-    def setup(self, port, host_ip, server):
-        # Gets the private ip for the current machine
-        if server:
-            self.TCP_IP = socket.gethostbyname_ex(socket.gethostname())[-1][1]
-        else:
-            self.TCP_IP = host_ip
-
-        self.TCP_PORT = port
-        self.buffer_size = 512
-
-    def start_server(self):
-        self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.s.bind((self.TCP_IP, self.TCP_PORT))
-        self.s.listen(1)
-
-        t = threading.Thread(target=self.start_server_thread)
-        t.start()
-        self.threads.append(t)
+            self.host_ip = socket.gethostbyname_ex(socket.gethostname())[-1][1]
+            print("[INFO] Host ip: " + str(self.host_ip))
+            self.streamserver = StreamServer((self.host_ip, port), self.handle)
+            self.process_serve_forever = Process(target=self.streamserver.serve_forever)
+            self.process_serve_forever.start()
+        print("[INFO] Setting up network sucessful")
+            
+    def handle(self, socket, address):
+        if address[0] not in self.ip_list:
+            self.ip_list.append(address[0])
+            print(self.ip_list)
+    
+        socket.send("Connection successful")
+        socket.close()
 
     def start_server_thread(self):
-        while True:
-            c, addr = self.s.accept()
-            ip_list.append(addr[0])
-        
-    def terminate_server(self):
         return 0
-
+    
+    def terminate_server(self):
+        self.streamserver.close()
+        self.process_serve_forever.terminate()
+        
     def new_connection(self, server_ip):
         # should be a thread to manage new connections
         return 0

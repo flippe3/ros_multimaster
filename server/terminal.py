@@ -10,9 +10,13 @@ class Terminal:
         self.multimaster = multimaster
         self.get_cmd()
         
-    def get_cmd(self):
-        self.cmd_string = raw_input("> ")
-        self.cmd = str(self.cmd_string).split(" ")
+    def get_cmd(self, cmd_string=None):
+        if cmd_string == None:
+            self.cmd_string = raw_input("> ")
+            self.cmd = str(self.cmd_string).split(" ")
+        else:
+            self.cmd_string = cmd_string
+            self.cmd = str(self.cmd_string).split(" ")
 
         self.cmd_history.append(self.cmd_string)
         self.run_cmd()
