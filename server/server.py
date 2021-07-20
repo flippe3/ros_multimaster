@@ -18,8 +18,8 @@ class Server:
         self.network = Network(server=True)
         self.multimaster = Multimaster()
         self.multimaster.setup(debug=False)
-        self.recieve_data("/test") # Have to put this in some kind of thread mgmt (probably a subprocess)
-        #self.terminal = Terminal(self.multimaster)
+        #self.recieve_data("/test") # Have to put this in some kind of thread mgmt (probably a subprocess)
+        self.terminal = Terminal(self.multimaster)
         #self.connected_machines()
         
         self.network.terminate_server()
