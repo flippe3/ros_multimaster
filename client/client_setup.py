@@ -10,10 +10,10 @@ class Client_Setup:
 
         self.host_ip = host_ip
         self.interface = interface
-        self.first_setup(host_ip, interface)
+        self.first_setup()
         self.connect_server()
         
-    def first_setup(self)
+    def first_setup(self):
         try:
             os.system("export ROS_MASTER_URI=http://" + str(self.host_ip) + ":11311")
             ip = os.popen('ip addr show ' + self.interface).read().split("inet ")[1].split("/")[0]
