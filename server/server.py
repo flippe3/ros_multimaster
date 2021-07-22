@@ -1,10 +1,8 @@
 import sys
 sys.path.append('util')
-from network import Network
 from terminal import Terminal
 from multimaster import Multimaster
 from process_mgmt import Subprocess
-from hosts import Hosts
 
 from std_msgs.msg import String
 import rospy

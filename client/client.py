@@ -7,6 +7,5 @@ class Client:
         self.multimaster = Multimaster()
         self.multimaster.setup(debug=True)
 
-
 c = Client()
 

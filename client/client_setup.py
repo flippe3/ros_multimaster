@@ -20,7 +20,7 @@ class Client_Setup:
             ip = os.popen('ip addr show ' + self.interface).read().split("inet ")[1].split("/")[0]
 
             hosts = open("/etc/hosts", "a")
-            hosts.write("### AUTOMATED NETWORK CONFIG ###")
+            hosts.write("### AUTOMATED NETWORK CONFIG ###\n")
             hosts.write(str(self.host_ip) + "\thost\n")
             hosts.write(str(ip) + "\t" + str(socket.gethostname()))
             hosts.write("\n### END ###\n")
