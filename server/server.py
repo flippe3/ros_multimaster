@@ -4,6 +4,7 @@ from network import Network
 from terminal import Terminal
 from multimaster import Multimaster
 from process_mgmt import Subprocess
+from hosts import Hosts
 
 from std_msgs.msg import String
 import rospy
@@ -15,12 +16,12 @@ class Server:
         
         # starts the network, scans for machines on the current
         # network, updates if a new machine wants to connect.
-        self.network = Network(server=True)
+        #self.network = Network(server=True)
         self.multimaster = Multimaster()
         self.multimaster.setup(debug=True)
         #self.recieve_data("/test") # Have to put this in some kind of thread mgmt (probably a subprocess)
         self.terminal = Terminal(self.multimaster)
-        self.connected_machines()
+        #self.connected_machines()
         
         self.network.terminate_server()
         

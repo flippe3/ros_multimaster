@@ -2,11 +2,11 @@ import sys
 sys.path.append('util')
 import os
 import socket
-from wipe import cleanup_hosts
+from hosts import Hosts
 
 class Client_Setup:
     def __init__(self, host_ip, interface):
-        cleanup_hosts()
+        host = Hosts() # Cleans up the host file
 
         self.host_ip = host_ip
         self.interface = interface
@@ -19,7 +19,7 @@ class Client_Setup:
             ip = os.popen('ip addr show ' + self.interface).read().split("inet ")[1].split("/")[0]
 
             hosts = open("/etc/hosts", "a")
-            hosts.write("### AUTOMATED NETWORK CONFIG ###\n")
+            hosts.write("### AUTOMATED NETWORK CONFIG ###")
             hosts.write(str(self.host_ip) + "\thost\n")
             hosts.write(str(ip) + "\t" + str(socket.gethostname()))
             hosts.write("\n### END ###\n")

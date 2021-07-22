@@ -1,34 +1,40 @@
 # Manages the network connections between all machines.
 # Also manages the new connections to the network.
-import sys
+import sys, os, time
 sys.path.append('util')
 #import socket
-import time
 import threading
 from gevent.server import StreamServer
 from gevent.pool import Pool
 import socket
 from multiprocessing import Process
-
+from hosts import Hosts
 
 class Network:
-    def __init__(self, port=5006, host_ip=None, server=True):
+    def __init__(self, port=5006, host_ip=None, server=True, interface="wlan0"):
         print("[INFO] Setting up network server")
+        self.hosts = Hosts() # cleans up the network file
         self.ip_list = []
+        self.interface = interface
 
         if server:
-            self.host_ip = socket.gethostbyname_ex(socket.gethostname())[-1][1]
+            self.host_ip = os.popen('ip addr show ' + self.interface).read().split("inet ")[1].split("/")[0]
+            self.hosts.add_new_device(self.host_ip)
+            self.ip_list.append(self.host_ip)
             print("[INFO] Host ip: " + str(self.host_ip))
+
             self.streamserver = StreamServer((self.host_ip, port), self.handle)
             self.process_serve_forever = Process(target=self.streamserver.serve_forever)
             self.process_serve_forever.start()
-        print("[INFO] Setting up network sucessful")
+        print("[INFO] Setting up network successful")
             
     def handle(self, socket, address):
         if address[0] not in self.ip_list:
             self.ip_list.append(address[0])
             print(self.ip_list)
-    
+            
+        self.hosts.add_new_device(address[0])
+            
         socket.send("Connection successful")
         socket.close()
 
@@ -52,3 +58,5 @@ class Network:
     def update_connection():
         # update old connections
         return 0 
+
+network = Network(interface="wlp59s0")
