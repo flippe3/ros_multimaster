@@ -5,11 +5,12 @@ import socket
 from hosts import Hosts
 
 class Client_Setup:
-    def __init__(self, host_ip, interface):
+    def __init__(self, host_ip, interface, port):
         host = Hosts() # Cleans up the host file
 
         self.host_ip = host_ip
         self.interface = interface
+        self.port = port
         self.first_setup()
         self.connect_server()
         
@@ -37,7 +38,7 @@ class Client_Setup:
             
 
     def connect_server(self):
-        return 0
+        os.system("nc " + self.host_ip + " " + str(self.port))
 
 # for debugging
-c = Client_Setup(host_ip="192.168.0.201", interface="wlan0")
+c = Client_Setup(host_ip="192.168.0.201", interface="wlp59s0", port=5006)
