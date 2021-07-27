@@ -18,19 +18,20 @@ def kill_child_processes(parent_pid, sig=signal.SIGTERM):
 
 class Subprocess:
     def __init__(self, command):
-        # check for if something already initialized is trying to start
         self.command = command
         
     def run(self, output=False):
         try:
             if output:
-                self.process = subprocess.Popen([self.command], shell=True)
+                self.process = subprocess.Popen([self.command], shell=True, stdout=subprocess.PIPE)
             else:
                 self.process = subprocess.Popen([self.command], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             self.pid = self.process.pid  # pid of the roscore process (which has child processes)
             #self.process.wait()
-            print("STARTED PID:", self.pid)
-            time.sleep(1)
+            print("STARTED PID:", str(self.pid) + " for: " + self.command)
+            time.sleep(0.5)
+            output = self.process.stdout.read()            
+            return output
         except OSError as e:
             sys.stderr.write(self.command, "could not be run")
             raise e
