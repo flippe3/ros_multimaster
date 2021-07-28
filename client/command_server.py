@@ -3,6 +3,7 @@ sys.path.append('util')
 from process_mgmt import Subprocess
 import socket
 from get_ip import get_ip
+from _thread import *
 
 class Command_Server:
     def __init__(self, port=5000):
@@ -38,9 +39,9 @@ class Command_Server:
         while True:
             client, address = self.server_socket.accept()
             print('Connected to: ' + address[0] + ':' + str(address[1]))
-            start_new_thread(threaded_client, (client, ))
+            start_new_thread(self.threaded_client, (client, ))
             self.thread_count += 1
-            print('Thread Number: ' + str(thread_count))
+            print('Thread Number: ' + str(self.thread_count))
 
     def terminate(self):
         self.server_socket.close()

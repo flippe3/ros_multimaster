@@ -9,6 +9,7 @@ from gevent.pool import Pool
 import socket
 from multiprocessing import Process
 from hosts import Hosts
+from get_ip import get_ip
 
 class Network:
     def __init__(self, port=5006, host_ip=None, server=True, interface="wlan0"):
@@ -18,7 +19,7 @@ class Network:
         self.interface = interface
 
         if server:
-            self.host_ip = os.popen('ip addr show ' + self.interface).read().split("inet ")[1].split("/")[0]
+            self.host_ip = get_ip()
             self.hosts.add_new_device(self.host_ip)
             self.ip_list.append(self.host_ip)
             print("[INFO] Host ip: " + str(self.host_ip))
