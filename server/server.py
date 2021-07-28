@@ -4,7 +4,6 @@ from terminal import Terminal
 from multimaster import Multimaster
 from process_mgmt import Subprocess
 from std_msgs.msg import String
-from command_client import Command_Client
 import rospy
 
 class Server:
@@ -18,11 +17,13 @@ class Server:
         #self.multimaster = Multimaster()
         #self.multimaster.setup(debug=True)
         #self.recieve_data("/test") # Have to put this in some kind of thread mgmt (probably a subprocess)
-        #self.terminal = Terminal(self.multimaster)
-        self.setup_command_clients()
-        self.add_command_clients("192.168.0.201", 5004)
-        self.list_clients()
-        self.send_command_client("192.168.0.201", "ls -l")
+        #self.setup_command_clients()
+        self.terminal = Terminal()
+        #self.add_command_clients("192.168.0.179", 5004)
+        #self.add_command_clients("192.168.0.201", 5005)
+        #self.list_clients()
+        #self.send_command_client("192.168.0.179", "ls -l ~/")
+        #self.send_command_client("192.168.0.201", "roscore")
         #self.connected_machines()
         
         
@@ -38,20 +39,6 @@ class Server:
 
     def callback(self):
         rospy.loginfo(rospy.get_caller_id() + "I heard %s", data.data)
-
-    def setup_command_clients(self):
-        self.server_sockets = []
-        
-    def add_command_clients(self, ip, port):
-        socket = Command_Client()
-        socket.connect(ip, port)
-        self.server_sockets.append((socket, ip))
-
-    def send_command_client(self, ip, command):
-        for i in self.server_sockets:
-            if i[1] == ip:
-                print(i)
-                i[0].send_command(command)
                 
     def list_clients(self):
         print(self.server_sockets)

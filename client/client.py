@@ -14,7 +14,7 @@ class Client:
         self.setup_server()
         
     def setup_server(self):
-        self.server = Command_Server(port=5004)
+        self.server = Command_Server(port=5005)
         self.server.start()
 
 c = Client()
