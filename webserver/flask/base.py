@@ -23,7 +23,9 @@ def hello(name=None):
 def server_command():
     server_input = request.form['input_server']
     print("[Recieved server input] :", server_input)
-    return render_template('index.html')
+    output = terminal.send_cmd(server_input)
+    print("Recieved output:", output)
+    return render_template('index.html', value=output)
 
 @app.route("/machine/", methods=['POST'])
 def machine_command():
