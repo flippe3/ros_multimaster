@@ -12,7 +12,7 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
         <title>CRMS</title>
-        {% endblock %}	
+        {% endblock %}
     </head>
     <body>
       
@@ -29,38 +29,69 @@
         
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
-              <li class="nav-item active">
+              <li class="nav-item">
                 <a class="nav-link" href="/">Terminal <span class="sr-only">(current)</span></a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="control.html">Control</a>
               </li>
-              <li class="nav-item">
+              <li class="nav-item active">
                 <a class="nav-link" href="connection.html">Connection</a>
               </li>
             </ul>
         </nav>
          
         <div class="container">
-	  <form action="/list-connections/index/" method="post">
+	  <div class="card mt-2">
+	    <div class="card-header">
+	      Connect
+	    </div>
+	    <div class="card-body">
+	      <form action="/connect/" method="post">
+		<div class="form-group">
+		  <label>IP address</label>
+		  <input type="text" name="connection_ip" class="form-control" placeholder="Enter IP">
+		</div>
+		<div class="form-group">
+		  <label>Port</label>
+		  <input type="text" name="connection_port" class="form-control" placeholder="Enter port">
+		</div>
+		<button type="submit" class="btn btn-primary">Connect</button>
+		{% if connection %}
+		{% if "success"==connection[:7] %}
+		<div class="alert alert-success alert-dismissible mt-2">
+		  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+		  <strong>Successfully connected to {{connection[7:]}}</strong>
+		</div>
+		{% else %}
+		<div class="alert alert-danger alert-dismissible mt-2">
+		  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+		  <strong>Failure to connect</strong>
+		</div>
+		{% endif %}
+		{% endif %}
+	      </form>
+	    </div>
+	  </div>
+
+	  <form action="/list-connections/" method="post">
 	    <div class="card mt-2">
 	      <div class="card-header">
 		<div class="mt-2 d-inline-block">
 		  Current connections
 		</div>
-		<a href="/connection.html" type="submit" class="btn btn-primary float-right">Connect</a>
-		<button type="submit" class="btn btn-primary float-right mr-1">Refresh</button>
+		<button type="submit" class="btn btn-primary float-right">Refresh</button>
 	      </div>
 
 	      <div class="card-body">
-		{% if list_output %}
+		{% if list_connections %}
 		<ul class="list-group">
-		  {% for conn in list_output %}
+		  {% for conn in list_connections %}
 		  <li class="list-group-item">
 		    <div class="mt-2 d-inline-block">
 		      {{ conn[1] }}
 		    </div>
-		    <button type="submit" name="remove" data-toggle="button" class="btn btn-outline-secondary float-right">Select</button>
+		    <button type="submit" name="remove" class="btn btn-outline-danger float-right">Remove</button>
 		  </li>
 		  {% endfor %}
 		</ul>
@@ -68,51 +99,7 @@
 	      </div>
 	    </div>
 	  </form>
-
-          <div class="row">
-            <div class="col-sm-6">
-              <div class="card mt-2" style="height: 600px;">
-                <div class="card-header">
-                  Server Terminal
-		  {% if selected_ip %}
-		  
-		  {% endif %}
-                </div>   
-                <div class="card-body">
-                  <form action="/server/" method="post">
-                    <div class="form-group">
-                      <label>Output</label>
-                      <textarea readonly class="form-control" id="output_server" rows="9">{{ server_output }}</textarea>
-                      <label>Input</label>
-                      <textarea class="form-control" id="input_server" name="input_server" rows="2"></textarea>
-                    </div>
-                    <button type=submit class="btn btn-primary">Run</button>
-                  </div>
-                  </form>
-                </div>
-            </div>
-            <div class="col-sm-6">
-              <div class="card mt-2" style="height: 600px;">
-                <div class="card-header">
-                  Machine Terminal
-                </div>              
-                <div class="card-body">
-                  <form action="/machine/" method="post">
-                    <div class="form-group">
-                      <label>Output</label>
-                      <textarea readonly class="form-control" id="output_machine" rows="9"></textarea>
-                      <label>Input</label>
-                      <textarea class="form-control" id="input_machine" name="input_machine" rows="2"></textarea>
-                    </div>
-                    <button type=submit class="btn btn-primary">Run</button>
-                  </div>
-                  </form>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-       {% endblock %}
+	</div>        
+	{% endblock %}
     </body>
 </html>
