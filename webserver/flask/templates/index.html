@@ -56,15 +56,17 @@
                   Server Terminal
                 </div>   
                 <div class="card-body">
-                  <div class="form-group">
-                    <label>Output</label>
-                    <textarea readonly class="form-control" id="output_server" rows="9"></textarea>
-                    <label>Input</label>
-                    <textarea class="form-control" id="input_server" rows="2"></textarea>
+                  <form action="/server/" method="post">
+                    <div class="form-group">
+                      <label>Output</label>
+                      <textarea readonly class="form-control" id="output_server" rows="9"></textarea>
+                      <label>Input</label>
+                      <textarea class="form-control" id="input_server" name="input_server" rows="2"></textarea>
+                    </div>
+                    <button type=submit class="btn btn-primary">Run</button>
                   </div>
-                  <a href="#" class="btn btn-primary">Run</a>
+                  </form>
                 </div>
-              </div>
             </div>
             <div class="col-sm-6">
               <div class="card mt-2" style="height: 600px;">
