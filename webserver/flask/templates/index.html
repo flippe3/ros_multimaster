@@ -74,13 +74,16 @@
                   Machine Terminal
                 </div>              
                 <div class="card-body">
-                  <div class="form-group">
-                    <label>Output</label>
-                    <textarea readonly class="form-control" id="output_machine" rows="9"></textarea>
-                    <label>Input</label>
-                    <textarea class="form-control" id="input_machine" rows="2"></textarea>
+                  <form action="/machine/" method="post">
+                    <div class="form-group">
+                      <label>Output</label>
+                      <textarea readonly class="form-control" id="output_machine" rows="9"></textarea>
+                      <label>Input</label>
+                      <textarea class="form-control" id="input_machine" name="input_machine" rows="2"></textarea>
+                    </div>
+                    <button type=submit class="btn btn-primary">Run</button>
                   </div>
-                  <a href="#" class="btn btn-primary">Run</a>
+                  </form>
                 </div>
               </div>
             </div>
