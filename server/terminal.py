@@ -48,10 +48,10 @@ class Terminal:
         else:
             try:
                 if self.cmd[0] == "connect" and len(self.cmd) == 3:
-                    self.socket_clients.add_command_clients(self.cmd[1], int(self.cmd[2]))
+                    return self.socket_clients.add_command_clients(self.cmd[1], int(self.cmd[2]))
 
                 elif self.cmd[0] == "run" and len(self.sub_cmd) != 0:
-                    self.socket_clients.send_command_client(ip=self.cmd[-1], command=self.sub_cmd)
+                    return self.socket_clients.send_command_client(ip=self.cmd[-1], command=self.sub_cmd)
 
                 elif self.cmd[0] == "list" and self.cmd[1] == "sockets":
                     s_sockets = self.socket_clients.server_sockets 

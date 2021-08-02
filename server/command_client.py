@@ -10,11 +10,12 @@ class Command_Client:
         except socket.error as e:
             print(str(e))
         self.response = self.client_socket.recv(1024)
-
+        return self.response.decode('utf-8')
+    
     def send_command(self, command):        
         self.client_socket.send(str.encode(command))    
         self.response = self.client_socket.recv(1024)
-        print(self.response)
+        return self.response.decode('utf-8')
             
     def terminate(self, ip, port):
         self.client_socket.close()

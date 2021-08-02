@@ -18,7 +18,7 @@ class Command_Server:
             print(str(e))
 
     def threaded_client(self, connection):
-        connection.send(str.encode('Welcome to the Servern'))
+        connection.send(str.encode('success ' + socket.gethostname()))
         while True:
             data = connection.recv(2048)
             # Run the command as a subprocess
