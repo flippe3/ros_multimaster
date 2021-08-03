@@ -1,118 +1,135 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        {% block head %}
-        <!-- Required meta tags -->
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<head>
+  {% block head %}
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-        <title>CRMS</title>
-        {% endblock %}	
-    </head>
-    <body>
-      
-        <!-- Your page content -->
-        {% block content %}
-        <div class="p-2 text-center bg-light">
-          <h1>Cloud Robotics Management System</h1>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+  
+  <title>CRMS</title>
+  {% endblock %}
+</head>
+
+<body>
+
+  <!-- Your page content -->
+  {% block content %}
+  <div class="p-2 text-center bg-light">
+    <h1>Cloud Robotics Management System</h1>
+  </div>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light pt-1">
+    <a class="navbar-brand" href="#">Navbar</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="/">Terminal <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="control.html">Control</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="connection.html">Connection</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="ros.html">ROS</a>
+        </li>
+      </ul>
+  </nav>
+
+  <div class="container">
+    <div class="card mt-2">
+      <form action="/list-connections/index/" method="post">
+
+        <div class="card-header">
+          <div class="mt-2 d-inline-block">
+            Current connections
+          </div>
+          <a href="/connection.html" type="submit" class="btn btn-primary float-right">Connect</a>
+          <button type="submit" class="btn btn-primary float-right mr-1">Refresh</button>
         </div>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light pt-1">
-          <a class="navbar-brand" href="#">Navbar</a>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-        
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-              <li class="nav-item active">
-                <a class="nav-link" href="/">Terminal <span class="sr-only">(current)</span></a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="control.html">Control</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="connection.html">Connection</a>
-              </li>
-            </ul>
-        </nav>
-         
-        <div class="container">
-	  <form action="/list-connections/index/" method="post">
-	    <div class="card mt-2">
-	      <div class="card-header">
-		<div class="mt-2 d-inline-block">
-		  Current connections
-		</div>
-		<a href="/connection.html" type="submit" class="btn btn-primary float-right">Connect</a>
-		<button type="submit" class="btn btn-primary float-right mr-1">Refresh</button>
-	      </div>
+      </form>      
 
-	      <div class="card-body">
-		{% if list_output %}
-		<ul class="list-group">
-		  {% for conn in list_output %}
-		  <li class="list-group-item">
-		    <div class="mt-2 d-inline-block">
-		      {{ conn[1] }}
-		    </div>
-		    <button type="submit" name="remove" data-toggle="button" class="btn btn-outline-secondary float-right">Select</button>
-		  </li>
-		  {% endfor %}
-		</ul>
-		{% endif %}
-	      </div>
-	    </div>
-	  </form>
-
-          <div class="row">
-            <div class="col-sm-6">
-              <div class="card mt-2" style="height: 600px;">
-                <div class="card-header">
-                  Server Terminal
-		  {% if selected_ip %}
-		  
-		  {% endif %}
-                </div>   
-                <div class="card-body">
-                  <form action="/server/" method="post">
-                    <div class="form-group">
-                      <label>Output</label>
-                      <textarea readonly class="form-control" id="output_server" rows="9">{{ server_output }}</textarea>
-                      <label>Input</label>
-                      <textarea class="form-control" id="input_server" name="input_server" rows="2"></textarea>
-                    </div>
-                    <button type=submit class="btn btn-primary">Run</button>
-                  </div>
-                  </form>
-                </div>
-            </div>
-            <div class="col-sm-6">
-              <div class="card mt-2" style="height: 600px;">
-                <div class="card-header">
-                  Machine Terminal
-                </div>              
-                <div class="card-body">
-                  <form action="/machine/" method="post">
-                    <div class="form-group">
-                      <label>Output</label>
-                      <textarea readonly class="form-control" id="output_machine" rows="9"></textarea>
-                      <label>Input</label>
-                      <textarea class="form-control" id="input_machine" name="input_machine" rows="2"></textarea>
-                    </div>
-                    <button type=submit class="btn btn-primary">Run</button>
-                  </div>
-                  </form>
-                </div>
+      <form action="/select_ip/" method="post">
+        <div class="card-body">
+          {% if list_output %}
+          <ul class="list-group">
+            {% for conn in list_output %}
+            <li class="list-group-item">
+              <div class="mt-2 d-inline-block">
+                {{ conn[1] }}
               </div>
-            </div>
+              <button type="submit" id="select_ip" name="select_ip" value={{conn[1]}}
+                class="btn btn-outline-secondary float-right">Select</button>
+            </li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+        </div>
+      </form>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="card mt-2" style="height: 600px;">
+          <div class="card-header">
+            Server Terminal
+            {% if selected_ip %}
+
+            {% endif %}
+          </div>
+          <div class="card-body">
+            <form action="/server/" method="post">
+              <div class="form-group">
+                <label>Output</label>
+                <textarea readonly class="form-control" id="output_server" rows="9">{{ server_output }}</textarea>
+                <label>Input</label>
+                <textarea class="form-control" id="input_server" name="input_server" rows="2"></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary">Run</button>
+            </form>
           </div>
         </div>
-        
-       {% endblock %}
-    </body>
+      </div>
+      <div class="col-sm-6">
+        <div class="card mt-2" style="height: 600px;">
+          <div class="card-header">
+            Machine Terminal
+          </div>
+          <div class="card-body">
+            <form action="/machine/" method="post">
+              <div class="form-group">
+                <label>Output</label>
+                <textarea readonly class="form-control" id="output_machine" rows="9"></textarea>
+                <label>Input</label>
+                <textarea class="form-control" id="input_machine" name="input_machine" rows="2"></textarea>
+              </div>
+              <button type=submit class="btn btn-primary">Run</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% endblock %}
+</body>
+
 </html>
