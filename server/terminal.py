@@ -34,10 +34,10 @@ class Terminal:
 
     def send_cmd(self, cmd_string=None):
         self.cmd_string = cmd_string.strip()
-        print(cmd_string)
+        print("CMD_STRING", self.cmd_string)
         self.cmd = str(self.cmd_string).split(" ")
         if self.cmd[0] == "run":
-            self.sub_cmd = re.findall('\[.*?\]', self.cmd_string)[0][1:-1]
+            self.sub_cmd = str(re.findall('\[.*?\]', self.cmd_string)[0][1:-1])
         return self.run_cmd()
         
     def run_cmd(self):
@@ -51,6 +51,7 @@ class Terminal:
                     return self.socket_clients.add_command_clients(self.cmd[1], int(self.cmd[2]))
 
                 elif self.cmd[0] == "run" and len(self.sub_cmd) != 0:
+                    print("Running command on client")
                     return self.socket_clients.send_command_client(ip=self.cmd[-1], command=self.sub_cmd)
 
                 elif self.cmd[0] == "list" and self.cmd[1] == "sockets":
@@ -79,6 +80,7 @@ class Terminal:
                 err_msg += "Write help for a help menu."
                 print(err_msg)
                 return err_msg
+
 
     def ros_cmds(self):
         self.ros_cmd = Subprocess(self.cmd_string)

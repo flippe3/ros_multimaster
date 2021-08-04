@@ -18,13 +18,17 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
     integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
     crossorigin="anonymous"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+  <script type="text/javascript"
+          src="{{ url_for('static', filename='scripts.js') }}"></script>
+  
   
   <title>CRMS</title>
   {% endblock %}
 </head>
 
-<body>
-
+<body onload="refresh_connections();">
   <!-- Your page content -->
   {% block content %}
   <div class="p-2 text-center bg-light">
@@ -55,35 +59,22 @@
   </nav>
 
   <div class="container">
-    <div class="card mt-2">
-      <form action="/list-connections/index/" method="post">
-
-        <div class="card-header">
-          <div class="mt-2 d-inline-block">
-            Current connections
-          </div>
-          <a href="/connection.html" type="submit" class="btn btn-primary float-right">Connect</a>
-          <button type="submit" class="btn btn-primary float-right mr-1">Refresh</button>
+    <div class="card mt-2" id="connection_card">
+      <div class="card-header">
+        <div class="mt-2 d-inline-block">
+          Current connections
         </div>
-      </form>      
-
-      <form action="/select_ip/" method="post">
-        <div class="card-body">
-          {% if list_output %}
-          <ul class="list-group">
-            {% for conn in list_output %}
-            <li class="list-group-item">
-              <div class="mt-2 d-inline-block">
-                {{ conn[1] }}
-              </div>
-              <button type="submit" id="select_ip" name="select_ip" value={{conn[1]}}
-                class="btn btn-outline-secondary float-right">Select</button>
-            </li>
-            {% endfor %}
-          </ul>
-          {% endif %}
+        <a href="/connection.html"
+	   type="submit" class="btn btn-primary float-right">Connect</a>
+        <button type="submit" class="btn btn-primary float-right mr-1" onclick="refresh_connections()">Refresh</button>
+      </div>
+        <div class="card-body" id="connection_body">	  
+	  <ul class="list-group">
+	    <div class="btn-group-toggle">
+	      <div id="connection_pos"></div>
+	    </div>
+	  </ul>
         </div>
-      </form>
     </div>
 
     <div class="row">
@@ -111,13 +102,14 @@
       <div class="col-sm-6">
         <div class="card mt-2" style="height: 600px;">
           <div class="card-header">
-            Machine Terminal
+            Machine Terminal	    
+	    <label class="float-right pb-0 mb-0" id="selected_ip"></label>
           </div>
           <div class="card-body">
             <form action="/machine/" method="post">
               <div class="form-group">
                 <label>Output</label>
-                <textarea readonly class="form-control" id="output_machine" rows="9"></textarea>
+                <textarea readonly class="form-control" id="machine_output" rows="9">{{ machine_output }}</textarea>
                 <label>Input</label>
                 <textarea class="form-control" id="input_machine" name="input_machine" rows="2"></textarea>
               </div>
@@ -126,9 +118,10 @@
           </div>
         </div>
       </div>
-    </div>
+    </div>      
   </div>
 
+  
   {% endblock %}
 </body>
 

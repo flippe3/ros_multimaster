@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, jsonify
+from flask import Flask, request, render_template, jsonify, session
 
 import sys
 sys.path.append('../../server')
@@ -8,6 +8,8 @@ from terminal import Terminal
 app = Flask(__name__)
 
 terminal = Terminal()
+
+app.secret_key = "BAD_SECRET_KEY"
 
 @app.route("/")
 @app.route("/index.html")
@@ -36,10 +38,14 @@ def server_command(name=None):
 
 @app.route("/machine/", methods=['POST'])
 def machine_command(name=None):
-    machine_input = request.form['input_machine']
-    print("[Recieved machine input] :", machine_input)
-    terminal.send_cmd(machine_input)
-    return render_template('index.html', name=name)
+    machine_input = request.form['input_machine'].strip()
+    print("[Recieved machine input] :", machine_input.strip())
+    if session.get('selected_ip') != None:
+        output=terminal.send_cmd("run [" + machine_input + "] " + session['selected_ip'])
+    else:
+        output = "No IP selected."
+    print(output)
+    return render_template('index.html', machine_output=output, name=name)
 
 @app.route("/connect/", methods=['POST'])
 def connection_command(name=None):
@@ -72,6 +78,21 @@ def select_ip(name=None):
     ip_address = request.form['select_ip']
     print('Selected ip:', ip_address)
     return render_template('index.html', selected_ip=ip_address, name=name)
+
+@app.route('/_set_ip')
+def set_ip():
+    ip = request.args.get('select_ip', "None",type=str)
+    print("Setting the ip", ip)
+    session['selected_ip'] = ip
+    print("Session is set session[selected_ip]", session['selected_ip'])
+    return jsonify(result=ip)
+
+@app.route("/_refresh_connections")
+def refresh_connections():
+    output = terminal.send_cmd("list sockets")
+    ip_list = []
+    for i in output: ip_list.append(i[1])
+    return jsonify(result=ip_list)
 
 if __name__ == '__main__':
     app.run(debug=True)
