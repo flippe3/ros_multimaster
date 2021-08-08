@@ -90,7 +90,7 @@
             <form action="/server/" method="post">
               <div class="form-group">
                 <label>Output</label>
-                <textarea readonly class="form-control" id="output_server" rows="9">{{ server_output }}</textarea>
+		<textarea readonly class="form-control" id="output_server" rows="9">{{ server_output }}</textarea>
                 <label>Input</label>
                 <textarea class="form-control" id="input_server" name="input_server" rows="2"></textarea>
               </div>

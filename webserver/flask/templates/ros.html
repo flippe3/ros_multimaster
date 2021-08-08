@@ -2,16 +2,27 @@
 <html lang="en">
     <head>
         {% block head %}
-        <!-- Required meta tags -->
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+	      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+		integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+		crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+		integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+		crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+		integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+		crossorigin="anonymous"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-        <title>CRMS</title>
+	<script type="text/javascript"
+		src="{{ url_for('static', filename='scripts.js') }}"></script>
+		
+	<title>CRMS</title>
         {% endblock %}
     </head>
     <body>
@@ -45,63 +56,40 @@
         </nav>
          
         <div class="container">
-	  <div class="card mt-2">
+	  <div class="card mt-2" id="topic_card">
 	    <div class="card-header">
-	      Connect
+              <div class="mt-2 d-inline-block">
+		ROS topics
+              </div>
+              <button type="submit" class="btn btn-primary float-right mr-1" onclick="refresh_ros_topics()">Refresh</button>
 	    </div>
-	    <div class="card-body">
-	      <form action="/connect/" method="post">
-		<div class="form-group">
-		  <label>IP address</label>
-		  <input type="text" name="connection_ip" class="form-control" placeholder="Enter IP">
+            <div class="card-body" id="topic_body">	  
+	      <ul class="list-group">
+		<div class="btn-group-toggle">
+		  <div id="ros_topics_pos">
+		  </div>
 		</div>
-		<div class="form-group">
-		  <label>Port</label>
-		  <input type="text" name="connection_port" class="form-control" placeholder="Enter port">
-		</div>
-		<button type="submit" class="btn btn-primary">Connect</button>
-		{% if connection %}
-		{% if "success"==connection[:7] %}
-		<div class="alert alert-success alert-dismissible mt-2">
-		  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-		  <strong>Successfully connected to {{connection[7:]}}</strong>
-		</div>
-		{% else %}
-		<div class="alert alert-danger alert-dismissible mt-2">
-		  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-		  <strong>Failure to connect</strong>
-		</div>
-		{% endif %}
-		{% endif %}
-	      </form>
-	    </div>
+	      </ul>
+            </div>
 	  </div>
 
-	  <form action="/list-connections/" method="post">
-	    <div class="card mt-2">
-	      <div class="card-header">
-		<div class="mt-2 d-inline-block">
-		  Current connections
-		</div>
-		<button type="submit" class="btn btn-primary float-right">Refresh</button>
-	      </div>
-
-	      <div class="card-body">
-		{% if list_connections %}
-		<ul class="list-group">
-		  {% for conn in list_connections %}
-		  <li class="list-group-item">
-		    <div class="mt-2 d-inline-block">
-		      {{ conn[1] }}
-		    </div>
-		    <button type="submit" name="remove" class="btn btn-outline-danger float-right">Remove</button>
-		  </li>
-		  {% endfor %}
-		</ul>
-		{% endif %}
-	      </div>
+	  <div class="card mt-2" id="command_card">
+	    <div class="card-header">
+              <div class="mt-2 d-inline-block">
+		ROS topics
+              </div>
+              <button type="submit" class="btn btn-primary float-right mr-1" onclick="run_ros_command()">Refresh</button>
 	    </div>
-	  </form>
+            <div class="card-body" id="topic_body">	  
+	      <ul class="list-group">
+		<div class="btn-group-toggle">
+		  <div id="ros_topics_pos"></div>
+		</div>
+	      </ul>
+            </div>
+	  </div>
+
+
 	</div>        
 	{% endblock %}
     </body>

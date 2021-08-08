@@ -27,11 +27,11 @@ class Subprocess:
             else:
                 self.process = subprocess.Popen([self.command], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             self.pid = self.process.pid  # pid of the roscore process (which has child processes)
-            #self.process.wait()
+            self.process.wait()
             print("STARTED PID:", str(self.pid) + " for: " + self.command)
-            time.sleep(0.5)
-            output = self.process.stdout.read()            
-            return output
+            text = self.process.stdout.read() 
+            return text
+        
         except OSError as e:
             sys.stderr.write(self.command, "could not be run")
             raise e

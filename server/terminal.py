@@ -3,6 +3,7 @@ sys.path.append('util')
 from process_mgmt import Subprocess
 from multimaster import Multimaster
 from socket_clients import Socket_Clients
+from get_ip import get_ip
 
 # COMMAND LIST:
 # all subcommands are given inside []
@@ -15,7 +16,8 @@ from socket_clients import Socket_Clients
 class Terminal:
     def __init__(self):
         self.cmd_history = []
-        print("[INFO] Starting terminal write q to quit")
+        self.server_ip = get_ip()
+        self.ip = None
         #self.multimaster = multimaster
         self.socket_clients = Socket_Clients()
         #self.get_cmd()
@@ -32,9 +34,9 @@ class Terminal:
             self.cmd_history.append(self.cmd_string)
         self.run_cmd()
 
-    def send_cmd(self, cmd_string=None):
+    def send_cmd(self, cmd_string=None, ip=None):
         self.cmd_string = cmd_string.strip()
-        print("CMD_STRING", self.cmd_string)
+        self.ip = ip
         self.cmd = str(self.cmd_string).split(" ")
         if self.cmd[0] == "run":
             self.sub_cmd = str(re.findall('\[.*?\]', self.cmd_string)[0][1:-1])
@@ -58,7 +60,7 @@ class Terminal:
                     s_sockets = self.socket_clients.server_sockets 
                     print(s_sockets)
                     return s_sockets                    
-                    
+                
                 elif self.cmd[0] == "help":
                     help_str = "COMMAND LIST:\n"
                     help_str += "all subcommands are given inside []\n"
@@ -68,12 +70,15 @@ class Terminal:
                     help_str += "list sockets : lists the currently connected sockets\n"
                     help_str += "help : shows this menu"
                     return help_str
-                    
+
                 else:
-                    err_msg = "Unrecognized command: " + str(self.cmd_string)
-                    err_msg = "Write help for a help menu."
-                    print(err_msg)
-                    return err_msg
+                    if self.ip == None:
+                        # Tries running the command on the server
+                        p = Subprocess(self.cmd_string)
+                        output = p.run(output=True)
+                    else:
+                        output = self.socket_clients.send_command_client(ip=self.ip, command=str(self.cmd_string))
+                    return output
 
             except:
                 err_msg = "ERROR: Unrecognized command: " + self.cmd_string + "\n"
@@ -85,5 +90,3 @@ class Terminal:
     def ros_cmds(self):
         self.ros_cmd = Subprocess(self.cmd_string)
         self.ros_cmd.run(output=True)
-
-        

@@ -3,11 +3,11 @@ from flask import Flask, request, render_template, jsonify, session
 import sys
 sys.path.append('../../server')
 sys.path.append('../../util')
-from terminal import Terminal
+from server import Server
 
 app = Flask(__name__)
 
-terminal = Terminal()
+server = Server()
 
 app.secret_key = "BAD_SECRET_KEY"
 
@@ -30,9 +30,9 @@ def ros(name=None):
 
 @app.route("/server/", methods=['POST'])
 def server_command(name=None):
-    server_input = request.form['input_server']
-    print("[Recieved server input] :", server_input)
-    output = terminal.send_cmd(server_input)
+    server_input = request.form['input_server'].strip()
+    print("[Recieved server input] :", server_input.strip())
+    output = server.terminal.send_cmd(server_input)
     print("Recieved output:", output)
     return render_template('index.html', server_output=output, name=name)
 
@@ -41,7 +41,7 @@ def machine_command(name=None):
     machine_input = request.form['input_machine'].strip()
     print("[Recieved machine input] :", machine_input.strip())
     if session.get('selected_ip') != None:
-        output=terminal.send_cmd("run [" + machine_input + "] " + session['selected_ip'])
+        output=server.terminal.send_cmd(machine_input, session['selected_ip'])
     else:
         output = "No IP selected."
     print(output)
@@ -53,24 +53,22 @@ def connection_command(name=None):
     port = request.form['connection_port']
     print("[Recieved IP] :", str(ip_address), ":", str(port))
     command = "connect " + str(ip_address).strip() + " " + str(port).strip()
-    output = terminal.send_cmd(command)
+    output = server.terminal.send_cmd(command)
     return render_template('/connection.html', connection=output, name=name)
 
 @app.route("/list-connections/", methods=['POST'])
 def list_connections_command(name=None):
-    output = terminal.send_cmd("list sockets")
+    output = server.terminal.send_cmd("list sockets")
     return render_template('/connection.html', list_connections=output, name=name)
 
 @app.route("/list-connections/index/", methods=['POST'])
 def list_connections_index_command(name=None):
-    output = terminal.send_cmd("list sockets")
-    #ip_address = request.form['select_ip']
-    #print("Selected ip", ip_address)
+    output = server.terminal.send_cmd("list sockets")
     return render_template('/index.html', list_output=output, name=name)
 
 @app.route("/list-connections/ros/", methods=['POST'])
 def list_connections_ros_command(name=None):
-    output = terminal.send_cmd("list sockets")
+    output = server.terminal.send_cmd("list sockets")
     return render_template('/ros.html', list_output=output, name=name)
 
 @app.route("/select_ip/", methods=['POST'])
@@ -89,10 +87,21 @@ def set_ip():
 
 @app.route("/_refresh_connections")
 def refresh_connections():
-    output = terminal.send_cmd("list sockets")
+    output = server.terminal.send_cmd("list sockets")
     ip_list = []
     for i in output: ip_list.append(i[1])
     return jsonify(result=ip_list)
+
+@app.route("/_refresh_topics")
+def refresh_ros_topics():
+    output = server.get_topics()
+    print(output)
+    topics = []
+    for i in output:
+        for j in i:
+            topics.append(j)
+    return jsonify(result=topics)
+
 
 if __name__ == '__main__':
     app.run(debug=True)

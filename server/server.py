@@ -4,7 +4,9 @@ from terminal import Terminal
 from multimaster import Multimaster
 from process_mgmt import Subprocess
 from std_msgs.msg import String
+import threading
 import rospy
+
 
 class Server:
     def __init__(self):
@@ -19,18 +21,18 @@ class Server:
         #self.recieve_data("/test") # Have to put this in some kind of thread mgmt (probably a subprocess)
         #self.setup_command_clients()
         self.terminal = Terminal()
-        #self.add_command_clients("192.168.0.179", 5004)
-        #self.add_command_clients("192.168.0.201", 5005)
-        #self.list_clients()
-        #self.send_command_client("192.168.0.179", "ls -l ~/")
-        #self.send_command_client("192.168.0.201", "roscore")
-        #self.connected_machines()
+
+        # Hack that is the only way to start roscore before flask rn.
+        self.t = threading.Thread(target=self.start_ros)
+        self.t.start()
+
         
+
         
-    def connected_machines(self):
-        p = Subprocess("rosservice call /master_discovery/list_masters")
-        p.run(output=True)
-        p.terminate()
+    def start_ros(self):
+        p = Subprocess("roscore")
+        p.run(output=False)
+        return p 
 
     def recieve_data(self, topic):
         rospy.init_node('listener', anonymous=True)
@@ -40,6 +42,9 @@ class Server:
     def callback(self):
         rospy.loginfo(rospy.get_caller_id() + "I heard %s", data.data)
                 
+    def get_topics(self):
+        return rospy.get_published_topics(namespace='/')
+        
     def list_clients(self):
         print(self.server_sockets)
         
@@ -54,6 +59,5 @@ class Server:
         # this will be the current interface for controlling the server
         # will be replaced by a web interface.
         return 0 
-
 # for debugging
 server = Server()
