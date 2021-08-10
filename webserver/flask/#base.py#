@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        {% block head %}
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+	      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+		integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+		crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+		integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+		crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+		integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+		crossorigin="anonymous"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+	<script type="text/javascript"
+		src="{{ url_for('static', filename='scripts.js') }}"></script>
+		
+	<title>CRMS</title>
+        {% endblock %}
+    </head>
+    <body>
+      
+        <!-- Your page content -->
+        {% block content %}
+        <div class="p-2 text-center bg-light">
+          <h1>Cloud Robotics Management System</h1>
+        </div>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light pt-1">
+          <a class="navbar-brand" href="#">Navbar</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item">
+                <a class="nav-link" href="/">Terminal <span class="sr-only">(current)</span></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="control.html">Control</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="connection.html">Connection</a>
+              </li>
+              <li class="nav-item active">
+                <a class="nav-link" href="ros.html">ROS</a>
+              </li>
+            </ul>
+        </nav>
+         
+        <div class="container">
+	  <div class="card mt-2" id="topic_card">
+	    <div class="card-header">
+              <div class="mt-2 d-inline-block">
+		ROS topics
+              </div>
+              <button type="submit" class="btn btn-primary float-right mr-1" onclick="refresh_ros_topics()">Refresh</button>
+	    </div>
+            <div class="card-body" id="topic_body">	  
+	      <ul class="list-group">
+		<div class="btn-group-toggle">
+		  <div id="ros_topics_pos">
+		  </div>
+		</div>
+	      </ul>
+            </div>
+	  </div>
+
+	  <div class="card mt-2" id="command_card">
+	    <div class="card-header">
+              <div class="mt-2 d-inline-block">
+		ROS topics
+              </div>
+              <button type="submit" class="btn btn-primary float-right mr-1" onclick="run_ros_command()">Refresh</button>
+	    </div>
+            <div class="card-body" id="topic_body">	  
+	      <ul class="list-group">
+		<div class="btn-group-toggle">
+		  <div id="ros_topics_pos"></div>
+		</div>
+	      </ul>
+            </div>
+	  </div>
+
+
+	</div>        
+	{% endblock %}
+    </body>
+</html>
+from flask import Flask, request, render_template, jsonify, session
+
+import sys
+sys.path.append('../../server')
+sys.path.append('../../util')
+from server import Server
+
+app = Flask(__name__)
+
+server = Server()
+
+app.secret_key = "BAD_SECRET_KEY"
+
+@app.route("/")
+@app.route("/index.html")
+def base(name=None):
+    return render_template('index.html', name=name)
+
+@app.route("/control.html")
+def control(name=None):
+    return render_template('control.html', name=name)
+
+@app.route("/connection.html")
+def connection(name=None):
+    return render_template('connection.html', name=name)
+
+@app.route("/ros.html")
+def ros(name=None):
+    return render_template('/ros.html', name=name)
+
+@app.route("/server/", methods=['POST'])
+def server_command(name=None):
+    server_input = request.form['input_server'].strip()
+    print("[Recieved server input] :", server_input.strip())
+    output = server.terminal.send_cmd(server_input)
+    print("Recieved output:", output)
+    return render_template('index.html', server_output=output, name=name)
+
+@app.route("/machine/", methods=['POST'])
+def machine_command(name=None):
+    machine_input = request.form['input_machine'].strip()
+    print("[Recieved machine input] :", machine_input.strip())
+    if session.get('selected_ip') != None:
+        output=server.terminal.send_cmd(machine_input, session['selected_ip'])
+    else:
+        output = "No IP selected."
+    print(output)
+    return render_template('index.html', machine_output=output, name=name)
+
+@app.route("/connect/", methods=['POST'])
+def connection_command(name=None):
+    ip_address = request.form['connection_ip']
+    port = request.form['connection_port']
+    print("[Recieved IP] :", str(ip_address), ":", str(port))
+    command = "connect " + str(ip_address).strip() + " " + str(port).strip()
+    output = server.terminal.send_cmd(command)
+    return render_template('/connection.html', connection=output, name=name)
+
+@app.route("/list-connections/", methods=['POST'])
+def list_connections_command(name=None):
+    output = server.terminal.send_cmd("list sockets")
+    return render_template('/connection.html', list_connections=output, name=name)
+
+@app.route("/list-connections/index/", methods=['POST'])
+def list_connections_index_command(name=None):
+    output = server.terminal.send_cmd("list sockets")
+    return render_template('/index.html', list_output=output, name=name)
+
+@app.route("/list-connections/ros/", methods=['POST'])
+def list_connections_ros_command(name=None):
+    output = server.terminal.send_cmd("list sockets")
+    return render_template('/ros.html', list_output=output, name=name)
+
+@app.route("/select_ip/", methods=['POST'])
+def select_ip(name=None):
+    ip_address = request.form['select_ip']
+    print('Selected ip:', ip_address)
+    return render_template('index.html', selected_ip=ip_address, name=name)
+
+@app.route('/_set_ip')
+def set_ip():
+    ip = request.args.get('select_ip', "None",type=str)
+    print("Setting the ip", ip)
+    session['selected_ip'] = ip
+    print("Session is set session[selected_ip]", session['selected_ip'])
+    return jsonify(result=ip)
+
+@app.route("/_refresh_connections")
+def refresh_connections():
+    output = server.terminal.send_cmd("list sockets")
+    ip_list = []
+    for i in output: ip_list.append(i[1])
+    return jsonify(result=ip_list)
+
+@app.route("/_refresh_topics")
+def refresh_ros_topics():
+    output = server.get_topics()
+    print(output)
+    topics = []
+    for i in output:
+        for j in i:
+            topics.append(j)
+    return jsonify(result=topics)
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
