@@ -25,9 +25,6 @@ class Server:
         # Hack that is the only way to start roscore before flask rn.
         self.t = threading.Thread(target=self.start_ros)
         self.t.start()
-
-        
-
         
     def start_ros(self):
         p = Subprocess("roscore")
@@ -44,7 +41,11 @@ class Server:
                 
     def get_topics(self):
         return rospy.get_published_topics(namespace='/')
-        
+
+    def get_bandwidth(self, topic):
+        return 
+    #return rospy.set_param()
+    
     def list_clients(self):
         print(self.server_sockets)
         

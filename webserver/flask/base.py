@@ -26,7 +26,7 @@ def connection(name=None):
 
 @app.route("/ros.html")
 def ros(name=None):
-    return render_template('/ros.html', name=name)
+    return render_template('ros.html', name=name)
 
 @app.route("/server/", methods=['POST'])
 def server_command(name=None):
@@ -54,22 +54,22 @@ def connection_command(name=None):
     print("[Recieved IP] :", str(ip_address), ":", str(port))
     command = "connect " + str(ip_address).strip() + " " + str(port).strip()
     output = server.terminal.send_cmd(command)
-    return render_template('/connection.html', connection=output, name=name)
+    return render_template('connection.html', connection=output, name=name)
 
 @app.route("/list-connections/", methods=['POST'])
 def list_connections_command(name=None):
     output = server.terminal.send_cmd("list sockets")
-    return render_template('/connection.html', list_connections=output, name=name)
+    return render_template('connection.html', list_connections=output, name=name)
 
 @app.route("/list-connections/index/", methods=['POST'])
 def list_connections_index_command(name=None):
     output = server.terminal.send_cmd("list sockets")
-    return render_template('/index.html', list_output=output, name=name)
+    return render_template('index.html', list_output=output, name=name)
 
 @app.route("/list-connections/ros/", methods=['POST'])
 def list_connections_ros_command(name=None):
     output = server.terminal.send_cmd("list sockets")
-    return render_template('/ros.html', list_output=output, name=name)
+    return render_template('ros.html', list_output=output, name=name)
 
 @app.route("/select_ip/", methods=['POST'])
 def select_ip(name=None):
@@ -101,6 +101,20 @@ def refresh_ros_topics():
         for j in i:
             topics.append(j)
     return jsonify(result=topics)
+
+@app.route('/_set_topic')
+def set_topic():
+    topic = request.args.get('select_topic', "None",type=str)
+    print("Setting the ros topic", topic)
+    session['selected_topic'] = topic
+    print("Session is set session[selected_topic]", session['selected_topic'])
+    return jsonify(result=topic)
+
+@app.route('/_get_topic_data')
+def get_topic_data():
+    session['selected_topic']
+    return jsonify(result=topic)
+
 
 
 if __name__ == '__main__':

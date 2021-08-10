@@ -23,11 +23,9 @@ class Command_Server:
             data = connection.recv(2048)
             # Run the command as a subprocess
             p = Subprocess(data.decode("utf-8"))
-            result = p.run()
+            result = p.run(output=True, service=False)
             p.terminate()
-
             reply = 'Result: ' + str(result.decode("utf-8"))
-
             if not data:
                 break
             connection.sendall(str.encode(reply))

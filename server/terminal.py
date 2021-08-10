@@ -75,7 +75,7 @@ class Terminal:
                     if self.ip == None:
                         # Tries running the command on the server
                         p = Subprocess(self.cmd_string)
-                        output = p.run(output=True)
+                        output = p.run(output=True, service=False)
                     else:
                         output = self.socket_clients.send_command_client(ip=self.ip, command=str(self.cmd_string))
                     return output

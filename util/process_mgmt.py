@@ -20,17 +20,25 @@ class Subprocess:
     def __init__(self, command):
         self.command = command
         
-    def run(self, output=False):
+    def run(self, output=False, service=False):
         try:
             if output:
                 self.process = subprocess.Popen([self.command], shell=True, stdout=subprocess.PIPE)
             else:
                 self.process = subprocess.Popen([self.command], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
             self.pid = self.process.pid  # pid of the roscore process (which has child processes)
-            self.process.wait()
+
+            if service:
+                time.sleep(0.5)
+            else:
+                self.process.wait()
+
             print("STARTED PID:", str(self.pid) + " for: " + self.command)
-            text = self.process.stdout.read() 
-            return text
+
+            if output:
+                return self.process.stdout.read() 
+            return 1 
         
         except OSError as e:
             sys.stderr.write(self.command, "could not be run")

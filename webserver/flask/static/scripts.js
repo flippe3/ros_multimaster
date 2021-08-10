@@ -8,15 +8,15 @@ function set_ip(ip) {
 }
 
 function set_topic(topic) {
-    $.getJSON('/_set_ip', {
-        select_ip: ip
+    $.getJSON('/_set_topic', {
+        select_topic: topic
     }, function(data) {
-        $("#selected_ip").text(data.result);
+        $("#selected_topic").text(data.result);
     });
     return false;    
 }
 
-function refresh_ros_topics() {
+function get_ros_topic_data() {
     $.getJSON('/_refresh_topics', {
     }, function(data){ 
 	//Cleans up old connections
@@ -36,7 +36,7 @@ function refresh_ros_topics() {
 	    var select_btn = document.createElement("button");
 	    select_btn.className = "btn btn-outline-primary float-right pt-0 pb-0";
 	    select_btn.innerHTML = "Select";
-	    select_btn.onclick= function () { set_topic(); };
+	    select_btn.onclick= function () { set_topic(topics); };
 	    select_btn.name = "selected_topic";
 
 	    text.appendChild(select_btn);
@@ -48,6 +48,17 @@ function refresh_ros_topics() {
     });
     return false;    
 }
+
+function get_topic_data() {
+    $.getJSON('/_get_topic_data', {
+    }, function(data){
+	console.log(data);
+	$("#bw").text(data.result);
+        //$("#topics").text(data.result);
+    });
+    return false;    
+}
+
 
 
 function refresh_connections() {
