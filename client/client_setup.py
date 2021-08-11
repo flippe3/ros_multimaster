@@ -3,6 +3,7 @@ sys.path.append('util')
 import os
 import socket
 from hosts import Hosts
+import subprocess
 
 class Client_Setup:
     def __init__(self, host_ip, interface, port):
@@ -26,7 +27,9 @@ class Client_Setup:
             hosts.write("\n### END ###\n")
 
             os.system("export ROS_HOSTNAME=" + str(ip))
-            os.system("sudo sh -c 'echo net.ipv4.icmp_echo_ignore_broadcasts=0 >> /etc/sysctl.conf'")
+            multicast = int(subprocess.check_output("cat /proc/sys/net/ipv4/icmp_echo_ignore_broadcasts", shell=True))
+            if multicast == 1:
+                os.system("sudo sh -c 'echo net.ipv4.icmp_echo_ignore_broadcasts=0 >> /etc/sysctl.conf'")
             os.system("sudo service procps restart")
 
         except IOError:
