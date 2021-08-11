@@ -30,7 +30,7 @@ class Subprocess:
             self.pid = self.process.pid  # pid of the roscore process (which has child processes)
 
             if service:
-                time.sleep(0.5)
+                time.sleep(2)
             else:
                 self.process.wait()
 

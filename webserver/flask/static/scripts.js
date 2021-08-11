@@ -1,6 +1,7 @@
-function set_ip(ip) {
+function set_ip(socket, ip) {
     $.getJSON('/_set_ip', {
-        select_ip: ip
+        select_ip: ip,
+	select_socket: socket
     }, function(data) {
         $("#selected_ip").text(data.result);
     });
@@ -15,7 +16,6 @@ function set_topic(topic) {
     });
     return false;    
 }
-
 function get_ros_topic_data() {
     $.getJSON('/_refresh_topics', {
     }, function(data){ 
@@ -71,25 +71,26 @@ function refresh_connections() {
 	    conn = document.getElementById("li_connection");
 	}
 
-	data.result.forEach(function(ip) {
+	for (let i = 0; i < data.ips.length; i++){
 	    var li = document.createElement("li");
 	    li.className = "list-group-item";
 	    li.id = "li_connection";
 	    
 	    var text = document.createElement("text");
-	    text.innerHTML = ip;
+	    text.innerHTML = data.ips[i];
 
 	    var select_btn = document.createElement("button");
 	    select_btn.innerHTML = "Select"
 	    select_btn.className = "btn btn-outline-primary float-right pt-0 pb-0";
-	    select_btn.onclick= function () { set_ip(ip); };
+	    select_btn.onclick= function () { set_ip(data.sockets[i], data.ips[i]); };
 	    select_btn.name = "selected_ip";
-
+	    select_btn.id = data.sockets[i];
+	    
 	    text.appendChild(select_btn);
 	    li.appendChild(text);
 
 	    document.getElementById("connection_pos").appendChild(li);
-	});
+	}
     });
     return false;    
 }

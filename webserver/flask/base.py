@@ -41,7 +41,7 @@ def machine_command(name=None):
     machine_input = request.form['input_machine'].strip()
     print("[Recieved machine input] :", machine_input.strip())
     if session.get('selected_ip') != None:
-        output=server.terminal.send_cmd(machine_input, session['selected_ip'])
+        output=server.terminal.send_cmd(machine_input, session['selected_socket'])
     else:
         output = "No IP selected."
     print(output)
@@ -80,17 +80,22 @@ def select_ip(name=None):
 @app.route('/_set_ip')
 def set_ip():
     ip = request.args.get('select_ip', "None",type=str)
+    socket = request.args.get('select_socket', "None",type=str)
     print("Setting the ip", ip)
     session['selected_ip'] = ip
-    print("Session is set session[selected_ip]", session['selected_ip'])
+    session['selected_socket'] = socket
+    print("Session is set session[selected_ip]", session['selected_ip'], session['selected_socket'])
     return jsonify(result=ip)
 
 @app.route("/_refresh_connections")
 def refresh_connections():
     output = server.terminal.send_cmd("list sockets")
     ip_list = []
-    for i in output: ip_list.append(i[1])
-    return jsonify(result=ip_list)
+    socket_list = []
+    for i in output:
+        socket_list.append(i[0])
+        ip_list.append(i[1])
+    return jsonify(ips=ip_list, sockets=socket_list)
 
 @app.route("/_refresh_topics")
 def refresh_ros_topics():

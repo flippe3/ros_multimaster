@@ -34,9 +34,9 @@ class Terminal:
             self.cmd_history.append(self.cmd_string)
         self.run_cmd()
 
-    def send_cmd(self, cmd_string=None, ip=None):
+    def send_cmd(self, cmd_string=None, socket=None):
         self.cmd_string = cmd_string.strip()
-        self.ip = ip
+        self.socket = socket
         self.cmd = str(self.cmd_string).split(" ")
         if self.cmd[0] == "run":
             self.sub_cmd = str(re.findall('\[.*?\]', self.cmd_string)[0][1:-1])
@@ -58,8 +58,11 @@ class Terminal:
 
                 elif self.cmd[0] == "list" and self.cmd[1] == "sockets":
                     s_sockets = self.socket_clients.server_sockets 
-                    print(s_sockets)
-                    return s_sockets                    
+                    clean_socket = []
+                    for i in s_sockets:
+                        print(i[1], hex(id(i[0])))
+                        clean_socket.append([hex(id(i[0])), i[1]])
+                    return clean_socket                    
                 
                 elif self.cmd[0] == "help":
                     help_str = "COMMAND LIST:\n"

@@ -10,8 +10,8 @@ class Socket_Clients:
         self.server_sockets.append((socket, ip))
         return connect_msg
         
-    def send_command_client(self, ip, command):
+    def send_command_client(self, socket, command):
         for i in self.server_sockets:
-            if i[1] == ip:
+            if socket in i[0]:
                 response = i[0].send_command(command)
                 return response
