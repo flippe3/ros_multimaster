@@ -17,8 +17,12 @@ class Client_Setup:
         
     def first_setup(self):
         try:
-            os.system("export ROS_MASTER_URI=http://" + str(self.host_ip) + ":11311")
             ip = os.popen('ip addr show ' + self.interface).read().split("inet ")[1].split("/")[0]
+
+            # Doesn't work
+            # Only works for the local python env
+            #os.environ['ROS_MASTER_URI'] = "http://" + str(ip) + ":11311"
+            #os.environ['ROS_HOSTNAME'] = str(ip)
 
             hosts = open("/etc/hosts", "a")
             hosts.write("### AUTOMATED NETWORK CONFIG ###\n")
@@ -26,7 +30,6 @@ class Client_Setup:
             hosts.write(str(ip) + "\t" + str(socket.gethostname()))
             hosts.write("\n### END ###\n")
 
-            os.system("export ROS_HOSTNAME=" + str(ip))
             multicast = int(subprocess.check_output("cat /proc/sys/net/ipv4/icmp_echo_ignore_broadcasts", shell=True))
             if multicast == 1:
                 os.system("sudo sh -c 'echo net.ipv4.icmp_echo_ignore_broadcasts=0 >> /etc/sysctl.conf'")
