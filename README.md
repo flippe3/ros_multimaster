@@ -82,8 +82,8 @@ allow 127.0.0.1/8
 ```
 Synchronize with the server
 ```
-sudo chrony stop
-sudo chrony start
+systemctl chrony stop
+systemctl chrony start
 ```
 For debugging
 ```
