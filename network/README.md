@@ -1,1 +1,0 @@
-Since multimaster_fkie depends on /etc/hosts, we need to configure the hosts file automatically. This solution broadcasts the updated configuration of the /etc/hosts every time a new machine requests the server to recieve the configuration. 

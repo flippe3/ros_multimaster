@@ -1,8 +1,8 @@
 from flask import Flask, request, render_template, jsonify, session
 
 import sys
-sys.path.append('../../server')
-sys.path.append('../../util')
+sys.path.append('../server')
+sys.path.append('../util')
 from server import Server
 
 app = Flask(__name__)
@@ -117,10 +117,7 @@ def set_topic():
 
 @app.route('/_get_topic_data')
 def get_topic_data():
-    session['selected_topic']
-    return jsonify(result=topic)
-
-
+    return jsonify(result=params_list)
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -22,7 +22,7 @@ class Network:
             self.host_ip = get_ip()
             self.hosts.add_new_device(self.host_ip)
             self.ip_list.append(self.host_ip)
-            print("[INFO] Host ip: " + str(self.host_ip))
+            print("[INFO] Host ip: " + str(self.host_ip) + ":" + str(port))
 
             self.streamserver = StreamServer((self.host_ip, port), self.handle)
             self.process_serve_forever = Process(target=self.streamserver.serve_forever)

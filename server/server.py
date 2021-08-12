@@ -16,21 +16,19 @@ class Server:
         # starts the network, scans for machines on the current
         # network, updates if a new machine wants to connect.
         #self.network = Network(server=True)
-        #self.multimaster = Multimaster()
-        #self.multimaster.setup(debug=True)
         #self.recieve_data("/test") # Have to put this in some kind of thread mgmt (probably a subprocess)
         #self.setup_command_clients()
+
         self.terminal = Terminal()
 
-        # Hack that is the only way to start roscore before flask rn.
-        self.t = threading.Thread(target=self.start_ros)
-        self.t.start()
+        self.multimaster = Multimaster() # Starts roscore and multimaster
+
         
     def start_ros(self):
         p = Subprocess("roscore")
         p.run(output=False)
-        return p 
-
+        return p     
+    
     def recieve_data(self, topic):
         rospy.init_node('listener', anonymous=True)
         rospy.Subscriber(topic, String, self.callback)
@@ -42,6 +40,13 @@ class Server:
     def get_topics(self):
         return rospy.get_published_topics(namespace='/')
 
+    def get_params(self):
+        try:
+            params = rospy.get_param_names()
+            return params
+        except ROSException:
+            print("[ERROR] Could not get param names")
+            return None
     def get_bandwidth(self, topic):
         return 
     #return rospy.set_param()
@@ -61,4 +66,4 @@ class Server:
         # will be replaced by a web interface.
         return 0 
 # for debugging
-server = Server()
+#server = Server()

@@ -16,7 +16,7 @@ function set_topic(topic) {
     });
     return false;    
 }
-function get_ros_topic_data() {
+function refresh_ros_topics() {
     $.getJSON('/_refresh_topics', {
     }, function(data){ 
 	//Cleans up old connections
@@ -52,8 +52,34 @@ function get_ros_topic_data() {
 function get_topic_data() {
     $.getJSON('/_get_topic_data', {
     }, function(data){
-	console.log(data);
-	$("#bw").text(data.result);
+	console.log(data.result);
+	var params = document.getElementById("li_param");
+	while (params){
+	    params.parentNode.removeChild(params);
+	    params = document.getElementById("li_param");
+	}
+
+
+	data.result.forEach(function(params) {
+	    var li = document.createElement("li");
+	    li.className = "list-group-item";
+	    li.id = "li_param";
+	    
+	    var text = document.createElement("text");
+	    text.innerHTML = params;
+
+	    var select_btn = document.createElement("button");
+	    select_btn.className = "btn btn-outline-primary float-right pt-0 pb-0";
+	    select_btn.innerHTML = "Select";
+	    //select_btn.onclick= function () { set_topic(topics); };
+	    select_btn.name = "selected_param";
+
+	    text.appendChild(select_btn);
+	    li.appendChild(text);
+
+	    document.getElementById("bandwidth").appendChild(li);
+	});
+	//$("#bw").text(data.result);
         //$("#topics").text(data.result);
     });
     return false;    

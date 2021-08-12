@@ -1,5 +1,6 @@
 import sys, re
 sys.path.append('util')
+
 from process_mgmt import Subprocess
 from multimaster import Multimaster
 from socket_clients import Socket_Clients
@@ -18,9 +19,7 @@ class Terminal:
         self.cmd_history = []
         self.server_ip = get_ip()
         self.ip = None
-        #self.multimaster = multimaster
         self.socket_clients = Socket_Clients()
-        #self.get_cmd()
         
     def get_cmd(self, cmd_string=None):
         if cmd_string == None:
