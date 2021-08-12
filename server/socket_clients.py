@@ -11,7 +11,8 @@ class Socket_Clients:
         return connect_msg
         
     def send_command_client(self, socket, command):
+        print("Sockets " + str(self.server_sockets) + " chosen " + str(socket))
         for i in self.server_sockets:
-            if socket in i[0]:
+            if socket in hex(id(i[0])):
                 response = i[0].send_command(command)
                 return response
