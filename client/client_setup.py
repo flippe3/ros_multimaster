@@ -46,5 +46,8 @@ class Client_Setup:
     def connect_server(self):
         os.system("nc " + self.host_ip + " " + str(self.port))
 
-# for debugging
-c = Client_Setup(host_ip="192.168.0.201", interface="wlp59s0", port=5006)
+try:
+    c = Client_Setup(host_ip=sys.argv[1], interface=sys.argv[2], port=sys.argv[3])
+except:
+    print("Error, have you entered everything?")
+    print("Example: sudo python3 client/client_setup.py 192.168.0.201 wlan0 5006")
