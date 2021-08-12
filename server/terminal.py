@@ -77,7 +77,7 @@ class Terminal:
                     if self.socket == None:
                         # Tries running the command on the server
                         p = Subprocess(self.cmd_string)
-                        output = p.run(output=True, service=False)
+                        output = p.run(output=True, service=False).decode('utf-8')
                     else:
                         output = self.socket_clients.send_command_client(socket=self.socket, command=str(self.cmd_string))
                     return output
