@@ -5,14 +5,24 @@ The goal of this repo is to create a simple solution to dealing with time synchr
 The network setup is from: https://digital.csic.es/bitstream/10261/133333/1/ROS-systems.pdf
 
 ## Setup server
+#### Step 1. Start a network process
 ```
-sudo pip install uwsgi
+sudo python server/network.py
 ```
-
-## Setup network
-#### Step 1. Start server.
+#### Step 2. Start the webserver
 ```
-sudo python network/server.py
+cd webserver/
+```
+```
+export FLASK_APP=app
+```
+```
+flask run
+```
+## Setup client
+#### Step 1. Run network setup
+```
+sudo python3 client/client_setup.py <SERVER-IP> wlan0 5006
 ```
 #### Step 2. Start all clients and close the program after every client is connected to the server.
 ```
@@ -25,18 +35,13 @@ sudo python network/client.py <SERVER-IP>
 ```
 sudo apt-get install ros-melodic-multimaster-fkie
 ``` 
+or https://github.com/fkie/multimaster_fkie
+
 #### Step 2. Put this in the `~/.bashrc` file with the IP of that machines IP.
 ```
 export ROS_MASTER_URI=http://<hostname or IP address>:11311
 ``` 
-#### Step 3. Enable multicast
-```
-sudo sh -c "echo net.ipv4.icmp_echo_ignore_broadcasts=0 >> /etc/sysctl.conf"
-```
-#### Step 4. Restart services
-```
-sudo service procps restart
-```
+
 ## Setup NTP on host
 Install NTP
 ```
@@ -77,8 +82,8 @@ allow 127.0.0.1/8
 ```
 Synchronize with the server
 ```
-sudo chrony stop
-sudo chrony start
+systemctl chrony stop
+systemctl chrony start
 ```
 For debugging
 ```
@@ -104,50 +109,3 @@ rosrun master_sync_fkie master_sync
 python publish_data.py
 python recieve_data.py
 ```
-
-<!---
-## Setup for multiple local ROS networks
-
-Install multimaster-fkie
-```
-sudo apt-get install ros-melodic-multimaster-fkie
-``` 
-Put this in the `~/.bashrc` file with the host IP.
-```
-export ROS_MASTER_URI=http://<hostname or IP address>:11311
-``` 
-Put this as a file in `/etc/netowrk/id-up.d` with the correct interface and the host IP. 
-```
-#!/bin/sh
-if [ "$IFACE" = "<interface>" ]; then
-  route add default gw <gateway IP address>
-fi
-```
-Make that file executable
-```
-chmod a+x multimaster
-```
-(ONLY FOR HOST MACHINE) Enable IP forwarding 
-```
-sudo sh -c "echo net.ipv4_forward=1 >> /etc/sysctl.conf"
-```
-(ONLY FOR HOST MACHINE) Add a static route between networks (if multiple networks) 
-where `<common network gateway>` is the host ip.
-```
-route add -net <local network> netmask 255.255.255.0 gw <common network gateway>
-```
-Enable multicast
-```
-sudo sh -c "echo net.ipv4.icmp_echo_ignore_broadcasts=0 >> /etc/sysctl.conf"
-```
-Restart services
-```
-sudo service procps restart
-```
-For all local ROS networks edit `/etc/hosts` on all machines to include the IP of every machine. 
-Example:
-```
-192.168.0.201   drone1
-192.168.0.221   turlebot
-```
--->
